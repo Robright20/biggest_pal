@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   biggest_pal.c                                      :+:      :+:    :+:   */
+/*   big.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fokrober <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/12/15 20:03:56 by fokrober          #+#    #+#             */
-/*   Updated: 2019/12/15 20:22:18 by fokrober         ###   ########.fr       */
+/*   Created: 2019/12/15 21:14:45 by fokrober          #+#    #+#             */
+/*   Updated: 2019/12/15 21:51:25 by fokrober         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,57 +14,37 @@
 
 int		ft_strlen(char *s)
 {
-	int		i;
+	int		len;
 
-	i = 0;
-	while (s && s[i])
-		i++;
-	return (i);
+	len = 0;
+	while (s && s[len])
+		len++;
+	return (len);
 }
 
-int		cmp_rev(char *s1, char *s2, int	n)
+int		ft_cmp(char *start, char *end, int n)
 {
-	char	*start;
-
-	start = s2;
-	if (n < 1 || !*s1 || ft_strlen(s2) <= n)
-		return (-1);
-	s2 += n;
-	while (n-- && s2 != start)
+	while (n--)
 	{
-		if (*s1 != *s2)
-			return (*s1 - *s2);
-		s1++;
-		s2--;
+		if (*start != *end)
+			return (0);
+		start++;
+		end--;
 	}
-	return (*s1 - *s2);
+	return (*start == *end); 
 }
 
-int		check(char *s, int len)
-{
-	int		mid;
-	int		cmp;
-	int		inc;
-
-	mid = len / 2;
-	inc = 0;
-	if (len % 2)
-		inc = 1;
-	cmp = cmp_rev(s, &s[mid + inc], mid - 1);
-	return (!cmp);
-}
-
-void	run(char *s)
+void	ft_exec(char *s)
 {
 	int		len;
-	int		ret;
 	int		k;
 	char	*start;
+	int		cmp;
 
 	len = ft_strlen(s);
 	k = len;
 	start = s;
-	while (!(ret = check(s, k)) && k > 3)
+	while (!(cmp = ft_cmp(s, &s[k - 1], k/2)) && k > 3)
 	{
 		if (s != start)
 			s--;
@@ -74,14 +54,13 @@ void	run(char *s)
 			s += len - k;
 		}
 	}
-	(void)(ret && write(1, s, k));
-	return ;
+	(void)(cmp && write(1, s, k));
 }
 
 int		main(int ac, char **av)
 {
 	if (ac == 2)
-		run(av[1]);
+		ft_exec(av[1]);
 	write(1, "\n", 1);
 	return (0);
 }
